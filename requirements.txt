@@ -10,4 +10,5 @@ numpy
 streamlit_option_menu
 streamlit-modal
 streamlit-float
+streamlit-extras
 
