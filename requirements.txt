@@ -7,4 +7,5 @@ pandas
 matplotlib
 plotly
 numpy
+streamlit_option_menu
 
