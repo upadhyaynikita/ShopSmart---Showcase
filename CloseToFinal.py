@@ -40,13 +40,13 @@ def stop_chatbot_session():
 
 
 # Snowflake Connection Details
-snowflake_user=st.secrets.snowflake_user
-snowflake_password=st.secrets.snowflake_password
-snowflake_account=st.secrets.snowflake_account
-snowflake_warehouse=st.secrets.snowflake_warehouse
-snowflake_database=st.secrets.snowflake_database
-snowflake_schema=st.secrets.snowflake_schema
-snowflake_table=st.secrets.snowflake_table
+snowflake_user=st.secrets["snowflake_user"]
+snowflake_password=st.secrets["snowflake_password"]
+snowflake_account=st.secrets["snowflake_account"]
+snowflake_warehouse=st.secrets["snowflake_warehouse"]
+snowflake_database=st.secrets["snowflake_database"]
+snowflake_schema=st.secrets["snowflake_schema"]
+snowflake_table=st.secrets["snowflake_table"]
 
 # Connect to Snowflake
 try:
