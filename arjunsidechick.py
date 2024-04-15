@@ -19,7 +19,7 @@ import plotly.graph_objects as go
 
 from streamlit_option_menu import option_menu
 
-from streamlit_modal import Modal
+
 from streamlit_float import *
 
 from streamlit import session_state
@@ -239,9 +239,7 @@ def delete_files_from_container():
     except Exception as e:
         st.error(f"An error occurred: {str(e)}")
 
-def show_modal(content):
-            # Display the modal content at the bottom of the page
-            st.markdown(f'<div style="position: fixed; bottom: 0; right:0; width: 100%;  background-color: #f0f0f0; padding: 20px; border-top: 1px solid #ddd;">{content}</div>', unsafe_allow_html=True)
+
 
 
 
