@@ -54,9 +54,9 @@ def stop_chatbot_session():
          st.experimental_rerun()
 #@st.cache_resource()
 # Snowflake Connection Details
-snowflake_user = "diwakarnahata4aws"
-snowflake_password = "Info@999"
-snowflake_account = "kechpqy-arb81606"
+snowflake_user = ""
+snowflake_password = ""
+snowflake_account = ""
 snowflake_warehouse = "COMPUTE_WH"
 snowflake_database = "DFS"
 snowflake_schema = "DEMO"
@@ -414,7 +414,7 @@ def main():
     #                 st.title("☃️ Devika")
 
     #                 # Initialize the chat messages history
-    #                 client = OpenAI(api_key="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")
+    #                 client = OpenAI(api_key="")
     #                 if "messages" not in st.session_state:
     #                     # system prompt includes table information, rules, and prompts the LLM to produce
     #                     # a welcome message to the user.
