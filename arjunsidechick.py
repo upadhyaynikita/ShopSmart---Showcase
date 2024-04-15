@@ -414,7 +414,7 @@ def main():
                     st.title("☃️ Devika")
 
                     # Initialize the chat messages history
-                    client = OpenAI(api_key=st.secrets.OPENAI_API_KEY)
+                    client = OpenAI(api_key="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")
                     if "messages" not in st.session_state:
                         # system prompt includes table information, rules, and prompts the LLM to produce
                         # a welcome message to the user.
