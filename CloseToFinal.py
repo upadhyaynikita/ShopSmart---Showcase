@@ -59,7 +59,7 @@ try:
     #     warehouse=snowflake_warehouse,
     #     database=snowflake_database,
     #     schema=snowflake_schema
-    )
+    # )
     #st.success("Snowflake Connection Established Successfully!")
 except Exception as e:
     st.error(f"Error connecting to Snowflake: {str(e)}")
