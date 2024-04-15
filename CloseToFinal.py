@@ -41,23 +41,24 @@ def stop_chatbot_session():
 
 # Snowflake Connection Details
 #snowflake_user=st.secrets["snowflake_user"]
-snowflake_user = st.secrets["snowflake"]["snowflake_user"]
-snowflake_password=st.secrets["snowflake"]["snowflake_password"]
-snowflake_account=st.secrets["snowflake"]["snowflake_account"]
-snowflake_warehouse=st.secrets["snowflake"]["snowflake_warehouse"]
-snowflake_database=st.secrets["snowflake"]["snowflake_database"]
-snowflake_schema=st.secrets["snowflake"]["snowflake_schema"]
-snowflake_table=st.secrets["snowflake"]["snowflake_table"]
+#snowflake_user = st.secrets["snowflake"]["snowflake_user"]
+# snowflake_password=st.secrets["snowflake"]["snowflake_password"]
+# snowflake_account=st.secrets["snowflake"]["snowflake_account"]
+# snowflake_warehouse=st.secrets["snowflake"]["snowflake_warehouse"]
+# snowflake_database=st.secrets["snowflake"]["snowflake_database"]
+# snowflake_schema=st.secrets["snowflake"]["snowflake_schema"]
+# snowflake_table=st.secrets["snowflake"]["snowflake_table"]
 
 # Connect to Snowflake
 try:
-    conn = snowflake.connector.connect(
-        user=snowflake_user,
-        password=snowflake_password,
-        account=snowflake_account,
-        warehouse=snowflake_warehouse,
-        database=snowflake_database,
-        schema=snowflake_schema
+    conn = st.connection("snowflake")
+    # conn = snowflake.connector.connect(
+    #     user=snowflake_user,
+    #     password=snowflake_password,
+    #     account=snowflake_account,
+    #     warehouse=snowflake_warehouse,
+    #     database=snowflake_database,
+    #     schema=snowflake_schema
     )
     #st.success("Snowflake Connection Established Successfully!")
 except Exception as e:
