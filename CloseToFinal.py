@@ -28,6 +28,7 @@ def execute_sql_query(sql):
     # Execute SQL query using Snowflake connection
     try:
         conn = st.connection("snowflake")
+        st.code(sql, language='sql')
         results = conn.query(sql)
         return results
     except Exception as e:
