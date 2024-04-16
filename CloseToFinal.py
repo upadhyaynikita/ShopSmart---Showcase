@@ -23,7 +23,7 @@ from streamlit_float import *
 from streamlit import session_state
 
 from chatbot import chatbot
-from plot2 1 import fetch_SF_data
+from plot2 1 import fetch_SF_data, connect_snowflake
 from EditData import fetch_data, update_data
 
 from streamlit_extras.stylable_container import stylable_container
