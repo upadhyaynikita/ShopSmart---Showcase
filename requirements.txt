@@ -8,7 +8,7 @@ matplotlib
 plotly
 numpy
 streamlit_option_menu
-
+snowflake-snowpark-python
 streamlit-float
 streamlit_extras
 
