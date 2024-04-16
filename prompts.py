@@ -26,7 +26,7 @@ Here are 6 critical rules for the interaction you must abide:
 1. You MUST MUST wrap the generated sql code within ``` sql code markdown in this format e.g
 ```sql
 (select 1) union (select 2)
-```
+``` ```
 2. If I don't tell you to find a limited set of results in the sql query or question, you MUST limit the number of responses to 10.
 3. Text / string where clauses must be fuzzy match e.g ilike %keyword%
 4. Make sure to generate a single snowflake sql code, not multiple. 
@@ -38,7 +38,7 @@ Don't forget to use "ilike %keyword%" for fuzzy match queries
 and wrap the generated sql code with ``` sql code markdown in this format e.g:
 ```sql
 (select 1) union (select 2)
-```
+``` ```
 Be strict with the column names from Metadata. I repeat, dont make mistakes in puling the column names in SQL, else the SQL will fail.
 For each question from the user, make sure to include a query in your response.
 
