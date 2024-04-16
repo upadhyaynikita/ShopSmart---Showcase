@@ -29,104 +29,104 @@ def stop_session():
     st.session_state.session_started = False
 
 
-# Snowflake Connection Details
-snowflake_user=st.secrets.snowflake_user
-snowflake_password=st.secrets.snowflake_password
-snowflake_account=st.secrets.snowflake_account
-snowflake_warehouse=st.secrets.snowflake_warehouse
-snowflake_database=st.secrets.snowflake_database
-snowflake_schema=st.secrets.snowflake_schema
-snowflake_table=st.secrets.snowflake_table
+# # Snowflake Connection Details
+# snowflake_user=st.secrets.snowflake_user
+# snowflake_password=st.secrets.snowflake_password
+# snowflake_account=st.secrets.snowflake_account
+# snowflake_warehouse=st.secrets.snowflake_warehouse
+# snowflake_database=st.secrets.snowflake_database
+# snowflake_schema=st.secrets.snowflake_schema
+# snowflake_table=st.secrets.snowflake_table
 
 # Connect to Snowflake
-try:
-    conn = snowflake.connector.connect(
-        user=snowflake_user,
-        password=snowflake_password,
-        account=snowflake_account,
-        warehouse=snowflake_warehouse,
-        database=snowflake_database,
-        schema=snowflake_schema
-    )
-    #st.success("Snowflake Connection Established Successfully!")
-except Exception as e:
-    st.error(f"Error connecting to Snowflake: {str(e)}")
+# try:
+#     conn = snowflake.connector.connect(
+#         user=snowflake_user,
+#         password=snowflake_password,
+#         account=snowflake_account,
+#         warehouse=snowflake_warehouse,
+#         database=snowflake_database,
+#         schema=snowflake_schema
+#     )
+#     #st.success("Snowflake Connection Established Successfully!")
+# except Exception as e:
+#     st.error(f"Error connecting to Snowflake: {str(e)}")
 
-# Function to fetch data from Snowflake table
-def fetch_data():
-    try:
-        cursor = conn.cursor()
-        cursor.execute(f"SELECT * FROM {snowflake_table}")
-        columns = [col[0] for col in cursor.description]
-        data = cursor.fetchall()
-        cursor.close()
-        return columns, data
-    except Exception as e:
-        st.error(f"Error fetching data from Snowflake: {str(e)}")
+# # Function to fetch data from Snowflake table
+# def fetch_data():
+#     try:
+#         cursor = conn.cursor()
+#         cursor.execute(f"SELECT * FROM {snowflake_table}")
+#         columns = [col[0] for col in cursor.description]
+#         data = cursor.fetchall()
+#         cursor.close()
+#         return columns, data
+#     except Exception as e:
+#         st.error(f"Error fetching data from Snowflake: {str(e)}")
 
-# Connect to Snowflake
+# # Connect to Snowflake
 
-def connect_snowflake():
-    conn = snowflake.connector.connect(
-        user=snowflake_user,
-        password=snowflake_password,
-        account=snowflake_account,
-        warehouse=snowflake_warehouse,
-        database=snowflake_database,
-        schema=snowflake_schema
-    )
-    return conn
+# def connect_snowflake():
+#     conn = snowflake.connector.connect(
+#         user=snowflake_user,
+#         password=snowflake_password,
+#         account=snowflake_account,
+#         warehouse=snowflake_warehouse,
+#         database=snowflake_database,
+#         schema=snowflake_schema
+#     )
+#     return conn
 
 # Fetch data from Snowflake table
 # Function to fetch data from Snowflake table
-def fetch_SF_data():
-    conn = connect_snowflake()
-    cursor = conn.cursor()
+# def fetch_SF_data():
+#     conn = connect_snowflake()
+#     cursor = conn.cursor()
     
-    # First business rule: Count of duplicate records based on INVOICE_ID and INVOICE_DATE
-    cursor.execute("SELECT COUNT(*) FROM STG_INVOICES GROUP BY INVOICE_ID, INVOICE_DATE HAVING COUNT(*) > 1")
-    duplicate_records = cursor.fetchall()
-    total_duplicate_records = sum([record[0] for record in duplicate_records])
+#     # First business rule: Count of duplicate records based on INVOICE_ID and INVOICE_DATE
+#     cursor.execute("SELECT COUNT(*) FROM STG_INVOICES GROUP BY INVOICE_ID, INVOICE_DATE HAVING COUNT(*) > 1")
+#     duplicate_records = cursor.fetchall()
+#     total_duplicate_records = sum([record[0] for record in duplicate_records])
     
-    # Second business rule: Count of records where AMOUNT is null or empty string
-    cursor.execute("SELECT COUNT(*) FROM STG_INVOICES WHERE TOTAL_TAX IS NULL OR sub_total is null")
-    null_amount_records = cursor.fetchone()[0]
+#     # Second business rule: Count of records where AMOUNT is null or empty string
+#     cursor.execute("SELECT COUNT(*) FROM STG_INVOICES WHERE TOTAL_TAX IS NULL OR sub_total is null")
+#     null_amount_records = cursor.fetchone()[0]
     
-    # Third business rule: Count of records where CUSTOMER_NAME is duplicate
-    cursor.execute("SELECT COUNT(*) FROM (SELECT VENDOR_NAME FROM STG_INVOICES GROUP BY VENDOR_NAME HAVING COUNT(*) > 1)")
-    duplicate_vendor_name_records = cursor.fetchone()[0]
+#     # Third business rule: Count of records where CUSTOMER_NAME is duplicate
+#     cursor.execute("SELECT COUNT(*) FROM (SELECT VENDOR_NAME FROM STG_INVOICES GROUP BY VENDOR_NAME HAVING COUNT(*) > 1)")
+#     duplicate_vendor_name_records = cursor.fetchone()[0]
     
-    # Fourth business rule: Count of records where TOTAL_TAX is greater than 10% of SUB_TOTAL or less than 8% of SUB_TOTAL
-    cursor.execute("""
-        SELECT COUNT(*) FROM STG_INVOICES 
-        WHERE 
-        TRY_CAST(TRIM(TOTAL_TAX) AS FLOAT) > TRY_CAST(TRIM(SUB_TOTAL) AS FLOAT) * 0.10
-        OR 
-        TRY_CAST(TRIM(TOTAL_TAX) AS FLOAT) < TRY_CAST(TRIM(SUB_TOTAL) AS FLOAT) * 0.08
-    """)
-    total_tax_out_of_range_records = cursor.fetchone()[0]
+    # # Fourth business rule: Count of records where TOTAL_TAX is greater than 10% of SUB_TOTAL or less than 8% of SUB_TOTAL
+    # cursor.execute("""
+    #     SELECT COUNT(*) FROM STG_INVOICES 
+    #     WHERE 
+    #     TRY_CAST(TRIM(TOTAL_TAX) AS FLOAT) > TRY_CAST(TRIM(SUB_TOTAL) AS FLOAT) * 0.10
+    #     OR 
+    #     TRY_CAST(TRIM(TOTAL_TAX) AS FLOAT) < TRY_CAST(TRIM(SUB_TOTAL) AS FLOAT) * 0.08
+    # """)
+    # total_tax_out_of_range_records = cursor.fetchone()[0]
     
-    # Total number of records in the table
-    cursor.execute("SELECT COUNT(*) FROM STG_INVOICES")
-    total_records = cursor.fetchone()[0]
+    # # Total number of records in the table
+    # cursor.execute("SELECT COUNT(*) FROM STG_INVOICES")
+    # total_records = cursor.fetchone()[0]
     
-    conn.close()
-    return total_duplicate_records, null_amount_records, duplicate_vendor_name_records, total_tax_out_of_range_records, total_records
+    # conn.close()
+    # return total_duplicate_records, null_amount_records, duplicate_vendor_name_records, total_tax_out_of_range_records, total_records
 
 
 
 
 
 # Function to update data in Snowflake table
-def update_data(column_name, unique_identifier, unique_identifier_value, new_value):
-    try:
-        cursor = conn.cursor()
-        query = f"UPDATE {snowflake_table} SET {column_name} = %s WHERE {unique_identifier} = %s"
-        cursor.execute(query, (new_value, unique_identifier_value))
-        conn.commit()
-        st.success("Data Updated Successfully!, Click on button above to Refresh. ")
-    except Exception as e:
-        st.error(f"Error updating data in Snowflake: {str(e)}")
+# def update_data(column_name, unique_identifier, unique_identifier_value, new_value):
+#     try:
+#         cursor = conn.cursor()
+#         query = f"UPDATE {snowflake_table} SET {column_name} = %s WHERE {unique_identifier} = %s"
+#         cursor.execute(query, (new_value, unique_identifier_value))
+#         conn.commit()
+#         st.success("Data Updated Successfully!, Click on button above to Refresh. ")
+#     except Exception as e:
+#         st.error(f"Error updating data in Snowflake: {str(e)}")
 
 
 
