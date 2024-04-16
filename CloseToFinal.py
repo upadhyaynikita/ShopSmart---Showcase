@@ -322,7 +322,7 @@ def main():
             
                 if st.session_state.messages[-1]["role"] != "assistant":
                     with st.chat_message("assistant"):
-                        response = generate_response(OpenAI(api_key=API_KEY), st.session_state.messages)
+                        response = generate_response(OpenAI(api_key=st.secrets.OPENAI_API_KEY), st.session_state.messages)
                         if response is not None:
                             st.markdown(response)
                             handle_response(response)
