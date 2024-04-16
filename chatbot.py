@@ -25,7 +25,7 @@ from streamlit import session_state
 # snowflake_schema = os.environ.get("SF_SCHEMA")
 # snowflake_table = os.environ.get("SF_TABLE")
 
-snowflake_user = process.env.{SF_USER} 
+snowflake_user = os.getenv('SF_USER')
 snowflake_password = process.env.{SF_PASSWORD} 
 snowflake_account = process.env.{SF_ACCOUNT} 
 snowflake_warehouse = process.env.{SF_WAREHOUSE} 
