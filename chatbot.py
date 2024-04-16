@@ -1,25 +1,26 @@
 from openai import OpenAI
+import snowflake.connector
 
 import re
 import streamlit as st
 from prompts import get_system_prompt
-from azure.identity import DefaultAzureCredential
-from azure.keyvault.secrets import SecretClient
+# from azure.identity import DefaultAzureCredential
+# from azure.keyvault.secrets import SecretClient
  
-# Initialize Azure Key Vault client
-vault_uri = "https://akv-invoices.vault.azure.net/"
-credential = DefaultAzureCredential()
-secret_client = SecretClient(vault_uri, credential)
+# # Initialize Azure Key Vault client
+# vault_uri = "https://akv-invoices.vault.azure.net/"
+# credential = DefaultAzureCredential()
+# secret_client = SecretClient(vault_uri, credential)
 
 
 # Snowflake Connection Details
-snowflake_user = secret_client.get_secret("sf-user").value
-snowflake_password = secret_client.get_secret("sf-password").value
-snowflake_account = secret_client.get_secret("sf-account-name").value
-snowflake_warehouse = secret_client.get_secret("sf-warehouse").value
-snowflake_database = secret_client.get_secret("sf-database").value
-snowflake_schema = secret_client.get_secret("sf-schema").value
-snowflake_table = secret_client.get_secret("sf-table").value
+snowflake_user = os.environ.get("SF_USER")
+snowflake_password = os.environ.get("SF_PASSWORD")
+snowflake_account = os.environ.get("SF_ACCOUNT")
+snowflake_warehouse = os.environ.get("SF_WAREHOUSE")
+snowflake_database = os.environ.get("SF_DATABASE")
+snowflake_schema = os.environ.get("SF_SCHEMA")
+snowflake_table = os.environ.get("SF_TABLE")
 
 def chatbot():
     #Code for Chatbot
@@ -28,7 +29,7 @@ def chatbot():
                 st.title("☃️ Devika")
 
                 # Initialize the chat messages history
-                client = OpenAI(api_key=secret_client.get_secret("open-ai-key").value)
+                client = OpenAI(api_key= os.environ.get("OPEN_API_KEY"))
                 if "messages" not in st.session_state:
                     # system prompt includes table information, rules, and prompts the LLM to produce
                     # a welcome message to the user.
