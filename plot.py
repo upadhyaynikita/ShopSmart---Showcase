@@ -38,8 +38,8 @@ def fetch_SF_data():
     total_duplicate_records = sum([record[0] for record in duplicate_records])
     
     # Second business rule: Count of records where AMOUNT is null or empty string
-    cursor.execute("SELECT COUNT(*) FROM STG_INVOICES WHERE AMOUNT IS NULL OR TRIM(AMOUNT) = ''")
-    null_amount_records = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(*) FROM STG_INVOICES WHERE SUB_TOTAL IS NULL OR TRIM(SUB_TOTAL) = ''")
+    null_sub_total_records = cursor.fetchone()[0]
     
     # Third business rule: Count of records where CUSTOMER_NAME is duplicate
     cursor.execute("SELECT COUNT(*) FROM (SELECT CUSTOMER_NAME FROM STG_INVOICES GROUP BY CUSTOMER_NAME HAVING COUNT(*) > 1)")
@@ -60,15 +60,15 @@ def fetch_SF_data():
     total_records = cursor.fetchone()[0]
     
     conn.close()
-    return total_duplicate_records, null_amount_records, duplicate_customer_name_records, total_tax_out_of_range_records, total_records
+    return total_duplicate_records, null_sub_total_records, duplicate_customer_name_records, total_tax_out_of_range_records, total_records
 
 # # Fetch latest data from Snowflake
-# total_duplicate_records, null_amount_records, duplicate_customer_name_records, total_tax_out_of_range_records, total_records = fetch_SF_data()
+# total_duplicate_records, null_sub_total_records, duplicate_customer_name_records, total_tax_out_of_range_records, total_records = fetch_SF_data()
 
 # # Create DataFrame for double bar graph
 # df = pd.DataFrame({
 #     'Business Rule': ['Duplicate Records (Invoice ID and Invoice Date)', 'Null Amount Records', 'Duplicate Customer Names', 'Total Tax Out of Range Records', 'Total Records'],
-#     'Count': [total_duplicate_records, null_amount_records, duplicate_customer_name_records, total_tax_out_of_range_records, total_records],
+#     'Count': [total_duplicate_records, null_sub_total_records, duplicate_customer_name_records, total_tax_out_of_range_records, total_records],
 #     'Color': ['blue', 'blue', 'blue', 'blue', 'orange']
 # })
 
