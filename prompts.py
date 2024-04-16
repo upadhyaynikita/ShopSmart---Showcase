@@ -1,7 +1,7 @@
 import streamlit as st
 
 SCHEMA_PATH = st.secrets.get("SCHEMA_PATH", "DFS.DEMO")
-QUALIFIED_TABLE_NAME = f"{SCHEMA_PATH}.VW_INVOICES "
+QUALIFIED_TABLE_NAME = "DFS.DEMO.VW_INVOICES" 
 TABLE_DESCRIPTION = """
 This table has various metrics for financial entities (also referred to as banks) since 1983.
 The user may describe the entities interchangeably as banks, financial institutions, or financial entities.
