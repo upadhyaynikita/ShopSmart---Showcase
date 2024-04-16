@@ -12,25 +12,18 @@ import os
 
 
 # Snowflake Connection Details
-snowflake_user = os.environ.get("SF_USER")
-snowflake_password = os.environ.get("SF_PASSWORD")
-snowflake_account = os.environ.get("SF_ACCOUNT")
-snowflake_warehouse = os.environ.get("SF_WAREHOUSE")
-snowflake_database = os.environ.get("SF_DATABASE")
-snowflake_schema = os.environ.get("SF_SCHEMA")
-snowflake_table = os.environ.get("SF_TABLE")
+# snowflake_user = os.environ.get("SF_USER")
+# snowflake_password = os.environ.get("SF_PASSWORD")
+# snowflake_account = os.environ.get("SF_ACCOUNT")
+# snowflake_warehouse = os.environ.get("SF_WAREHOUSE")
+# snowflake_database = os.environ.get("SF_DATABASE")
+# snowflake_schema = os.environ.get("SF_SCHEMA")
+# snowflake_table = os.environ.get("SF_TABLE")
 
 # Function to copy records from STG_INVOICES to WH_INVOICES and truncate STG_INVOICES
 def publish_data():
     try:
-        conn = snowflake.connector.connect(
-            user=snowflake_user,
-            password=snowflake_password,
-            account=snowflake_account,
-            warehouse=snowflake_warehouse,
-            database=snowflake_database,
-            schema=snowflake_schema
-        )
+        conn = st.connection("snowflake")
         cursor = conn.cursor()
 
         # Copy records from STG_INVOICES to WH_INVOICES
