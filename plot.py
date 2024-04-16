@@ -24,14 +24,7 @@ import os
 
 # Function to connect to Snowflake
 def connect_snowflake():
-    conn = snowflake.connector.connect(
-        user=snowflake_user,
-        password=snowflake_password,
-        account=snowflake_account,
-        warehouse=snowflake_warehouse,
-        database=snowflake_database,
-        schema=snowflake_schema
-    )
+    conn = st.connection("snowflake")
     return conn
 
 # Function to fetch data from Snowflake table
