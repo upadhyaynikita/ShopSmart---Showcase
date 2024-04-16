@@ -52,7 +52,7 @@ def update_data(column_name, unique_identifier, unique_identifier_value, new_val
         cursor = conn.cursor()
         query = f"UPDATE STG_INVOICES SET {column_name} = %s WHERE {unique_identifier} = %s"
         cursor.execute(query, (new_value, unique_identifier_value))
-        conn.commit()
+        # conn.commit()
         st.success("Data Updated Successfully!")
     except Exception as e:
         st.error(f"Error updating data in Snowflake: {str(e)}")
