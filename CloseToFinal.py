@@ -110,39 +110,39 @@ def connect_snowflake():
 
 # Fetch data from Snowflake table
 # Function to fetch data from Snowflake table
-def fetch_SF_data():
-    conn = connect_snowflake()
-    cursor = conn.cursor()
+# def fetch_SF_data():
+#     conn = connect_snowflake()
+#     cursor = conn.cursor()
     
-    # First business rule: Count of duplicate records based on INVOICE_ID and INVOICE_DATE
-    cursor.execute("SELECT COUNT(*) FROM STG_INVOICES GROUP BY INVOICE_ID, INVOICE_DATE HAVING COUNT(*) > 1")
-    duplicate_records = cursor.fetchall()
-    total_duplicate_records = sum([record[0] for record in duplicate_records])
+#     # First business rule: Count of duplicate records based on INVOICE_ID and INVOICE_DATE
+#     cursor.execute("SELECT COUNT(*) FROM STG_INVOICES GROUP BY INVOICE_ID, INVOICE_DATE HAVING COUNT(*) > 1")
+#     duplicate_records = cursor.fetchall()
+#     total_duplicate_records = sum([record[0] for record in duplicate_records])
     
-    # Second business rule: Count of records where AMOUNT is null or empty string
-    cursor.execute("SELECT COUNT(*) FROM STG_INVOICES WHERE TOTAL_TAX IS NULL OR sub_total is null")
-    null_amount_records = cursor.fetchone()[0]
+#     # Second business rule: Count of records where AMOUNT is null or empty string
+#     cursor.execute("SELECT COUNT(*) FROM STG_INVOICES WHERE TOTAL_TAX IS NULL OR sub_total is null")
+#     null_amount_records = cursor.fetchone()[0]
     
-    # Third business rule: Count of records where CUSTOMER_NAME is duplicate
-    cursor.execute("SELECT COUNT(*) FROM (SELECT VENDOR_NAME FROM STG_INVOICES GROUP BY VENDOR_NAME HAVING COUNT(*) > 1)")
-    duplicate_vendor_name_records = cursor.fetchone()[0]
+#     # Third business rule: Count of records where CUSTOMER_NAME is duplicate
+#     cursor.execute("SELECT COUNT(*) FROM (SELECT VENDOR_NAME FROM STG_INVOICES GROUP BY VENDOR_NAME HAVING COUNT(*) > 1)")
+#     duplicate_vendor_name_records = cursor.fetchone()[0]
     
-    # Fourth business rule: Count of records where TOTAL_TAX is greater than 10% of SUB_TOTAL or less than 8% of SUB_TOTAL
-    cursor.execute("""
-        SELECT COUNT(*) FROM STG_INVOICES 
-        WHERE 
-        TRY_CAST(TRIM(TOTAL_TAX) AS FLOAT) > TRY_CAST(TRIM(SUB_TOTAL) AS FLOAT) * 0.10
-        OR 
-        TRY_CAST(TRIM(TOTAL_TAX) AS FLOAT) < TRY_CAST(TRIM(SUB_TOTAL) AS FLOAT) * 0.08
-    """)
-    total_tax_out_of_range_records = cursor.fetchone()[0]
+#     # Fourth business rule: Count of records where TOTAL_TAX is greater than 10% of SUB_TOTAL or less than 8% of SUB_TOTAL
+    # cursor.execute("""
+    #     SELECT COUNT(*) FROM STG_INVOICES 
+    #     WHERE 
+    #     TRY_CAST(TRIM(TOTAL_TAX) AS FLOAT) > TRY_CAST(TRIM(SUB_TOTAL) AS FLOAT) * 0.10
+    #     OR 
+    #     TRY_CAST(TRIM(TOTAL_TAX) AS FLOAT) < TRY_CAST(TRIM(SUB_TOTAL) AS FLOAT) * 0.08
+    # """)
+    # total_tax_out_of_range_records = cursor.fetchone()[0]
     
-    # Total number of records in the table
-    cursor.execute("SELECT COUNT(*) FROM STG_INVOICES")
-    total_records = cursor.fetchone()[0]
+    # # Total number of records in the table
+    # cursor.execute("SELECT COUNT(*) FROM STG_INVOICES")
+    # total_records = cursor.fetchone()[0]
     
-    conn.close()
-    return total_duplicate_records, null_amount_records, duplicate_vendor_name_records, total_tax_out_of_range_records, total_records
+    # conn.close()
+    # return total_duplicate_records, null_amount_records, duplicate_vendor_name_records, total_tax_out_of_range_records, total_records
 
 
 
