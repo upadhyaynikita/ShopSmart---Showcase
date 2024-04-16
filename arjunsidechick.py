@@ -54,9 +54,9 @@ def stop_chatbot_session():
          st.experimental_rerun()
 #@st.cache_resource()
 # Snowflake Connection Details
-snowflake_user = ""
-snowflake_password = ""
-snowflake_account = ""
+snowflake_user = "diwakarnahata4aws"
+snowflake_password = "Info@999"
+snowflake_account = "kechpqy-arb81606"
 snowflake_warehouse = "COMPUTE_WH"
 snowflake_database = "DFS"
 snowflake_schema = "DEMO"
