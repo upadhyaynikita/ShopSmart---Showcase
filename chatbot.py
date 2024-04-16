@@ -77,4 +77,9 @@ def chatbot():
                 # Prompt for user input and save
                 if prompt := st.chat_input():
                     st.session_state.messages.append({"role": "user", "content": prompt})        
-###          
+###     
+def main():
+ chatbot()
+
+if __name__ == "__main__":
+    main()
