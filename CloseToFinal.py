@@ -12,13 +12,8 @@ import snowflake.connector
 import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
-import numpy as np
-import random
 import plotly.graph_objects as go
-
 from streamlit_option_menu import option_menu
-
-
 from streamlit_float import *
 from streamlit import session_state
 
@@ -28,6 +23,39 @@ from EditData import fetch_data, update_data
 from publish import publish_data
 
 from streamlit_extras.stylable_container import stylable_container
+
+def execute_sql_query(sql):
+    # Execute SQL query using Snowflake connection
+    try:
+        conn = st.connection("snowflake")
+        results = conn.query(sql)
+        return results
+    except Exception as e:
+        st.error(f"Failed to execute SQL query: {e}")
+        return None
+
+def handle_response(response):
+    # Parse response for SQL query and execute if available
+    sql_match = re.search(r"```sql\n(.*)\n```", response, re.DOTALL)
+    if sql_match:
+        sql = sql_match.group(1)
+        results = execute_sql_query(sql)
+        if results is not None:
+            st.dataframe(results)
+
+def generate_response(client, messages):
+    response = ""
+    try:
+        for delta in client.chat.completions.create(
+            model="gpt-4",
+            messages=[{"role": m["role"], "content": m["content"]} for m in messages],
+            stream=True,
+        ):
+            response += (delta.choices[0].delta.content or "")
+        return response
+    except Exception as e:
+        st.error(f"Failed to generate response: {e}")
+        return None
 
 def start_chatbot_session():
     if "chatbot_session" not in st.session_state:
@@ -44,126 +72,6 @@ def stop_chatbot_session():
     if st.button("Stop ChatBOT", key="stop_chatbot_button", help = "Click on button to close the BOT"):
          st.session_state.chatbot_session = False
          st.experimental_rerun()
-
-
-# # Snowflake Connection Details
-# snowflake_user=st.secrets.snowflake_user
-# snowflake_password=st.secrets.snowflake_password
-# snowflake_account=st.secrets.snowflake_account
-# snowflake_warehouse=st.secrets.snowflake_warehouse
-# snowflake_database=st.secrets.snowflake_database
-# snowflake_schema=st.secrets.snowflake_schema
-# snowflake_table=st.secrets.snowflake_table
-
-# # Connect to Snowflake
-# try:
-#     conn = snowflake.connector.connect(
-#         user=snowflake_user,
-#         password=snowflake_password,
-#         account=snowflake_account,
-#         warehouse=snowflake_warehouse,
-#         database=snowflake_database,
-#         schema=snowflake_schema
-#     )
-#     #st.success("Snowflake Connection Established Successfully!")
-# except Exception as e:
-#     st.error(f"Error connecting to Snowflake: {str(e)}")
-
-#Function to publish data to final table
-# def publish_data():
-   
-#         cursor = conn.cursor()
-
-#         # Copy records from STG_INVOICES to WH_INVOICES
-#         cursor.execute("INSERT INTO WH_INVOICES SELECT * FROM STG_INVOICES")
-#         st.session_state.publish_success = True
-
-#         # Truncate STG_INVOICES
-#         cursor.execute("TRUNCATE TABLE STG_INVOICES")
-
-#         conn.commit()
-#         cursor.close()
-#         conn.close()
-
-# Function to fetch data from Snowflake table
-# def fetch_data():
-#     try:
-#         cursor = conn.cursor()
-#         cursor.execute(f"SELECT * FROM {snowflake_table}")
-#         columns = [col[0] for col in cursor.description]
-#         data = cursor.fetchall()
-#         cursor.close()
-#         return columns, data
-#     except Exception as e:
-#         st.error(f"Error fetching data from Snowflake: {str(e)}")
-
-# # Connect to Snowflake
-
-# def connect_snowflake():
-#     conn = snowflake.connector.connect(
-#         user=snowflake_user,
-#         password=snowflake_password,
-#         account=snowflake_account,
-#         warehouse=snowflake_warehouse,
-#         database=snowflake_database,
-#         schema=snowflake_schema
-#     )
-#     return conn
-
-# Fetch data from Snowflake table
-# Function to fetch data from Snowflake table
-# def fetch_SF_data():
-#     conn = connect_snowflake()
-#     cursor = conn.cursor()
-    
-#     # First business rule: Count of duplicate records based on INVOICE_ID and INVOICE_DATE
-#     cursor.execute("SELECT COUNT(*) FROM STG_INVOICES GROUP BY INVOICE_ID, INVOICE_DATE HAVING COUNT(*) > 1")
-#     duplicate_records = cursor.fetchall()
-#     total_duplicate_records = sum([record[0] for record in duplicate_records])
-    
-#     # Second business rule: Count of records where AMOUNT is null or empty string
-#     cursor.execute("SELECT COUNT(*) FROM STG_INVOICES WHERE TOTAL_TAX IS NULL OR sub_total is null")
-#     null_amount_records = cursor.fetchone()[0]
-    
-#     # Third business rule: Count of records where CUSTOMER_NAME is duplicate
-#     cursor.execute("SELECT COUNT(*) FROM (SELECT VENDOR_NAME FROM STG_INVOICES GROUP BY VENDOR_NAME HAVING COUNT(*) > 1)")
-#     duplicate_vendor_name_records = cursor.fetchone()[0]
-    
-#     # Fourth business rule: Count of records where TOTAL_TAX is greater than 10% of SUB_TOTAL or less than 8% of SUB_TOTAL
-    # cursor.execute("""
-    #     SELECT COUNT(*) FROM STG_INVOICES 
-    #     WHERE 
-    #     TRY_CAST(TRIM(TOTAL_TAX) AS FLOAT) > TRY_CAST(TRIM(SUB_TOTAL) AS FLOAT) * 0.10
-    #     OR 
-    #     TRY_CAST(TRIM(TOTAL_TAX) AS FLOAT) < TRY_CAST(TRIM(SUB_TOTAL) AS FLOAT) * 0.08
-    # """)
-    # total_tax_out_of_range_records = cursor.fetchone()[0]
-    
-    # # Total number of records in the table
-    # cursor.execute("SELECT COUNT(*) FROM STG_INVOICES")
-    # total_records = cursor.fetchone()[0]
-    
-    # conn.close()
-    # return total_duplicate_records, null_amount_records, duplicate_vendor_name_records, total_tax_out_of_range_records, total_records
-
-
-
-
-
-# Function to update data in Snowflake table
-# def update_data(column_name, unique_identifier, unique_identifier_value, new_value):
-#     try:
-#         cursor = conn.cursor()
-#         query = f"UPDATE {snowflake_table} SET {column_name} = %s WHERE {unique_identifier} = %s"
-#         cursor.execute(query, (new_value, unique_identifier_value))
-#         conn.commit()
-#         st.success("Data Updated Successfully!, Click on button above to Refresh. ")
-#     except Exception as e:
-#         st.error(f"Error updating data in Snowflake: {str(e)}")
-
-
-
-
 
 #file to upload in azure container
 def upload_to_azure_container(account_name, account_key, container_name, file_path, blob_name=None):
@@ -396,61 +304,85 @@ def main():
 
         st.markdown("------------------------------------------------------------------------")
         # Location 2: Display container if session is started
+        
         if st.session_state.get("chatbot_session", False):
-        #if st.session_state.get("session_started", False):
+        
             # Display scrollable container
             with st.container(height = 500):
-                # chatbot()
-                # st.write("hello")
-                
-            # Code for Chatbot
-
-            ##
                 st.title("☃️ Devika")
 
-                # Initialize the chat messages history
-                client = OpenAI(api_key=st.secrets.OPENAI_API_KEY)
                 if "messages" not in st.session_state:
-                    # system prompt includes table information, rules, and prompts the LLM to produce
-                    # a welcome message to the user.
                     st.session_state.messages = [{"role": "system", "content": get_system_prompt()}]
-
-
-                # display the existing chat messages
+            
                 for message in st.session_state.messages:
                     if message["role"] == "system":
                         continue
                     with st.chat_message(message["role"]):
                         st.write(message["content"])
-                        if "results" in message:
-                            st.dataframe(message["results"])
-
-                # If last message is not from assistant, we need to generate a new response
+            
                 if st.session_state.messages[-1]["role"] != "assistant":
                     with st.chat_message("assistant"):
-                        response = ""
-                        resp_container = st.empty()
-                        for delta in client.chat.completions.create(
-                            model="gpt-4",
-                            messages=[{"role": m["role"], "content": m["content"]} for m in st.session_state.messages],
-                            stream=True,
-                        ):
-                            response += (delta.choices[0].delta.content or "")
-                            resp_container.markdown(response)
-
-                        message = {"role": "assistant", "content": response}
-                        # Parse the response for a SQL query and execute if available
-                        sql_match = re.search(r"```sql\n(.*)\n```", response, re.DOTALL)
-                        if sql_match:
-                            sql = sql_match.group(1)
-                            conn = st.connection("snowflake")
-                            message["results"] = conn.query(sql)
-                            st.dataframe(message["results"])
-                        st.session_state.messages.append(message)
-                # Prompt for user input and save
+                        response = generate_response(OpenAI(api_key=API_KEY), st.session_state.messages)
+                        if response is not None:
+                            st.markdown(response)
+                            handle_response(response)
+            
                 if prompt := st.chat_input():
-                    st.session_state.messages.append({"role": "user", "content": prompt})        
-###                     
+                    st.session_state.messages.append({"role": "user", "content": prompt})
+                            
+#             # Code for Chatbot
+
+#             ##
+#                 st.title("☃️ Devika")
+
+#                 # Initialize the chat messages history
+#                 client = OpenAI(api_key=st.secrets.OPENAI_API_KEY)
+#                 if "messages" not in st.session_state:
+#                     # system prompt includes table information, rules, and prompts the LLM to produce
+#                     # a welcome message to the user.
+#                     st.session_state.messages = [{"role": "system", "content": get_system_prompt()}]
+
+
+#                 # display the existing chat messages
+#                 for message in st.session_state.messages:
+#                     if message["role"] == "system":
+#                         continue
+#                     with st.chat_message(message["role"]):
+#                         st.write(message["content"])
+#                         if "results" in message:
+#                             st.dataframe(message["results"])
+
+#                 # If last message is not from assistant, we need to generate a new response
+#                 if st.session_state.messages[-1]["role"] != "assistant":
+#                     with st.chat_message("assistant"):
+#                         response = ""
+#                         resp_container = st.empty()
+#                         for delta in client.chat.completions.create(
+#                             model="gpt-4",
+#                             messages=[{"role": m["role"], "content": m["content"]} for m in st.session_state.messages],
+#                             stream=True,
+#                         ):
+#                             response += (delta.choices[0].delta.content or "")
+#                             resp_container.markdown(response)
+
+#                         message = {"role": "assistant", "content": response}
+#                         # Parse the response for a SQL query and execute if available
+#                         sql_match = re.search(r"```sql\n(.*)\n```", response, re.DOTALL)
+#                         if sql_match:
+#                             sql = sql_match.group(1)
+#                             conn = st.connection("snowflake")
+                            
+#                             results = execute_sql_query(sql)
+#                             if results is not None:
+#                                 st.dataframe(results)
+                                
+#                             # message["results"] = conn.query(sql)
+#                             # st.dataframe(message["results"])
+#                         st.session_state.messages.append(message)
+#                 # Prompt for user input and save
+#                 if prompt := st.chat_input():
+#                     st.session_state.messages.append({"role": "user", "content": prompt})        
+# ###                     
         
             # Add a button to stop the session
             stop_chatbot_session()
