@@ -2,6 +2,7 @@ import streamlit as st
 # from azure.identity import DefaultAzureCredential
 # from azure.keyvault.secrets import SecretClient
 import snowflake.connector
+import os
  
 # # Initialize Azure Key Vault client
 # vault_uri = "https://akv-invoices.vault.azure.net/"
