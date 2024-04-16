@@ -18,7 +18,7 @@ import plotly.graph_objects as go
 
 from streamlit_option_menu import option_menu
 
-from streamlit_modal import Modal
+
 from streamlit_float import *
 from streamlit import session_state
 
