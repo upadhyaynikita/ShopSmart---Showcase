@@ -2,6 +2,7 @@ import streamlit as st
 import snowflake.connector
 import pandas as pd
 import plotly.graph_objects as go
+import os
 
 # from azure.identity import DefaultAzureCredential
 # from azure.keyvault.secrets import SecretClient
