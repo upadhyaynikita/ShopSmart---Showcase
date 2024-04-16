@@ -25,6 +25,7 @@ from streamlit import session_state
 from chatbot import chatbot
 from plot2 1 import fetch_SF_data, connect_snowflake
 from EditData import fetch_data, update_data
+from publish import publish_data
 
 from streamlit_extras.stylable_container import stylable_container
 
@@ -69,20 +70,20 @@ def stop_chatbot_session():
 #     st.error(f"Error connecting to Snowflake: {str(e)}")
 
 #Function to publish data to final table
-def publish_data():
+# def publish_data():
    
-        cursor = conn.cursor()
+#         cursor = conn.cursor()
 
-        # Copy records from STG_INVOICES to WH_INVOICES
-        cursor.execute("INSERT INTO WH_INVOICES SELECT * FROM STG_INVOICES")
-        st.session_state.publish_success = True
+#         # Copy records from STG_INVOICES to WH_INVOICES
+#         cursor.execute("INSERT INTO WH_INVOICES SELECT * FROM STG_INVOICES")
+#         st.session_state.publish_success = True
 
-        # Truncate STG_INVOICES
-        cursor.execute("TRUNCATE TABLE STG_INVOICES")
+#         # Truncate STG_INVOICES
+#         cursor.execute("TRUNCATE TABLE STG_INVOICES")
 
-        conn.commit()
-        cursor.close()
-        conn.close()
+#         conn.commit()
+#         cursor.close()
+#         conn.close()
 
 # Function to fetch data from Snowflake table
 # def fetch_data():
