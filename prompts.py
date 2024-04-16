@@ -1,24 +1,7 @@
 import streamlit as st
-# from azure.identity import DefaultAzureCredential
-# from azure.keyvault.secrets import SecretClient
 import snowflake.connector
 import os
  
-# # Initialize Azure Key Vault client
-# vault_uri = "https://akv-invoices.vault.azure.net/"
-# credential = DefaultAzureCredential()
-# secret_client = SecretClient(vault_uri, credential)
-
-# Snowflake Connection Details
-
-
-# snowflake_user = os.environ.get("SF_USER")
-# snowflake_password = os.environ.get("SF_PASSWORD")
-# snowflake_account = os.environ.get("SF_ACCOUNT")
-# snowflake_warehouse = os.environ.get("SF_WAREHOUSE")
-# snowflake_database = os.environ.get("SF_DATABASE")
-# snowflake_schema = os.environ.get("SF_SCHEMA")
-# snowflake_table = os.environ.get("SF_TABLE")
 
 SCHEMA_PATH = st.secrets.get("SCHEMA_PATH", "DFS.DEMO")
 QUALIFIED_TABLE_NAME = f"{SCHEMA_PATH}.VW_INVOICES "
@@ -64,7 +47,7 @@ For each question from the user, make sure to include a query in your response.
 
 Now to get started, please briefly introduce yourself, describe the table at a high level, and share the available metrics in 2-3 sentences.
 Then show only below 2 example questions for reference, don't run them.  I repeat, show only the below 2 example -
-1. Identify duplicate invoices based on a combination of InvoiceId and Amount
+1. Identify duplicate invoices based on a combination of InvoiceId and SUB_TOTAL
 2. Verify VAT compliance by checking if the VAT Amount is correctly calculated within the expected VAT rates (8%, 12%, 18%)
 """
 
