@@ -17,21 +17,15 @@ from streamlit import session_state
 
 # Snowflake Connection Details
 # process.env.{ENVIRONMENT_VARIABLE_NAME} )
-# snowflake_user = os.environ.get("SF_USER")
-# snowflake_password = os.environ.get("SF_PASSWORD")
-# snowflake_account = os.environ.get("SF_ACCOUNT")
-# snowflake_warehouse = os.environ.get("SF_WAREHOUSE")
-# snowflake_database = os.environ.get("SF_DATABASE")
-# snowflake_schema = os.environ.get("SF_SCHEMA")
-# snowflake_table = os.environ.get("SF_TABLE")
+snowflake_user = os.environ.get("SF_USER")
+snowflake_password = os.environ.get("SF_PASSWORD")
+snowflake_account = os.environ.get("SF_ACCOUNT")
+snowflake_warehouse = os.environ.get("SF_WAREHOUSE")
+snowflake_database = os.environ.get("SF_DATABASE")
+snowflake_schema = os.environ.get("SF_SCHEMA")
+snowflake_table = os.environ.get("SF_TABLE")
 
-snowflake_user = os.getenv('SF_USER')
-snowflake_password = process.env.{SF_PASSWORD} 
-snowflake_account = process.env.{SF_ACCOUNT} 
-snowflake_warehouse = process.env.{SF_WAREHOUSE} 
-snowflake_database = process.env.{SF_DATABASE} 
-snowflake_schema = process.env.{SF_SCHEMA} 
-snowflake_table = process.env.{SF_TABLE} 
+
 
 
 def chatbot():
