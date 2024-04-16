@@ -33,9 +33,9 @@ def publish_data():
         # Truncate STG_INVOICES
         cursor.execute("TRUNCATE TABLE STG_INVOICES")
 
-        conn.commit()
-        cursor.close()
-        conn.close()
+        # conn.commit()
+        # cursor.close()
+        # conn.close()
 
     except Exception as e:
         st.error(f"An error occurred: {str(e)}")
