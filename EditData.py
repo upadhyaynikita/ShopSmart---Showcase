@@ -57,7 +57,7 @@ def update_data(column_name, unique_identifier, unique_identifier_value, new_val
     except Exception as e:
         st.error(f"Error updating data in Snowflake: {str(e)}")
 
-Main Streamlit App
+# Main Streamlit App
 def main():
     st.title("Snowflake Data Editor")
 
