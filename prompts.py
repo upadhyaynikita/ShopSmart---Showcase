@@ -10,21 +10,15 @@ import os
 # secret_client = SecretClient(vault_uri, credential)
 
 # Snowflake Connection Details
-snowflake_user = process.env.{SF_USER} 
-snowflake_password = process.env.{SF_PASSWORD} 
-snowflake_account = process.env.{SF_ACCOUNT} 
-snowflake_warehouse = process.env.{SF_WAREHOUSE} 
-snowflake_database = process.env.{SF_DATABASE} 
-snowflake_schema = process.env.{SF_SCHEMA} 
-snowflake_table = process.env.{SF_TABLE} 
 
-# snowflake_user = os.environ.get("SF_USER")
-# snowflake_password = os.environ.get("SF_PASSWORD")
-# snowflake_account = os.environ.get("SF_ACCOUNT")
-# snowflake_warehouse = os.environ.get("SF_WAREHOUSE")
-# snowflake_database = os.environ.get("SF_DATABASE")
-# snowflake_schema = os.environ.get("SF_SCHEMA")
-# snowflake_table = os.environ.get("SF_TABLE")
+
+snowflake_user = os.environ.get("SF_USER")
+snowflake_password = os.environ.get("SF_PASSWORD")
+snowflake_account = os.environ.get("SF_ACCOUNT")
+snowflake_warehouse = os.environ.get("SF_WAREHOUSE")
+snowflake_database = os.environ.get("SF_DATABASE")
+snowflake_schema = os.environ.get("SF_SCHEMA")
+snowflake_table = os.environ.get("SF_TABLE")
 
 SCHEMA_PATH = st.secrets.get("SCHEMA_PATH", "DFS.DEMO")
 QUALIFIED_TABLE_NAME = f"{SCHEMA_PATH}.VW_INVOICES "
