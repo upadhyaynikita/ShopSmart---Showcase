@@ -12,13 +12,13 @@ import os
 # Snowflake Connection Details
 
 
-snowflake_user = os.environ.get("SF_USER")
-snowflake_password = os.environ.get("SF_PASSWORD")
-snowflake_account = os.environ.get("SF_ACCOUNT")
-snowflake_warehouse = os.environ.get("SF_WAREHOUSE")
-snowflake_database = os.environ.get("SF_DATABASE")
-snowflake_schema = os.environ.get("SF_SCHEMA")
-snowflake_table = os.environ.get("SF_TABLE")
+# snowflake_user = os.environ.get("SF_USER")
+# snowflake_password = os.environ.get("SF_PASSWORD")
+# snowflake_account = os.environ.get("SF_ACCOUNT")
+# snowflake_warehouse = os.environ.get("SF_WAREHOUSE")
+# snowflake_database = os.environ.get("SF_DATABASE")
+# snowflake_schema = os.environ.get("SF_SCHEMA")
+# snowflake_table = os.environ.get("SF_TABLE")
 
 SCHEMA_PATH = st.secrets.get("SCHEMA_PATH", "DFS.DEMO")
 QUALIFIED_TABLE_NAME = f"{SCHEMA_PATH}.VW_INVOICES "
@@ -71,14 +71,7 @@ Then show only below 2 example questions for reference, don't run them.  I repea
 @st.cache_data(show_spinner="Loading Devika's context...")
 def get_table_context(table_name: str, table_description: str, metadata_query: str = None):
     table = table_name.split(".")
-    conn = snowflake.connector.connect(
-        user=snowflake_user,
-        password=snowflake_password,
-        account=snowflake_account,
-        warehouse=snowflake_warehouse,
-        database=snowflake_database,
-        schema=snowflake_schema
-    )
+    conn = st.connection("snowflake")
     columns = conn.query(f"""
         SELECT COLUMN_NAME, DATA_TYPE FROM {table[0].upper()}.INFORMATION_SCHEMA.COLUMNS
         WHERE TABLE_SCHEMA = '{table[1].upper()}' AND TABLE_NAME = '{table[2].upper()}'
