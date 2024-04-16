@@ -48,10 +48,46 @@ Then show only below 2 example questions for reference, don't run them.  I repea
 2. Verify VAT compliance by checking if the VAT Amount is correctly calculated within the expected VAT rates (8%, 12%, 18%)
 """
 
+snowflake_user = "diwakarnahata4aws"
+snowflake_password = "Info@999"
+snowflake_account = "kechpqy-arb81606"
+snowflake_warehouse = "COMPUTE_WH"
+snowflake_database = "DFS"
+snowflake_schema = "DEMO"
+snowflake_table = "STG_INVOICES"
+
+#@st.cache_resource()
+# Connect to Snowflake
+try:
+    conn = snowflake.connector.connect(
+        user=snowflake_user,
+        password=snowflake_password,
+        account=snowflake_account,
+        warehouse=snowflake_warehouse,
+        database=snowflake_database,
+        schema=snowflake_schema
+    )
+    #st.success("Snowflake Connection Established Successfully!")
+except Exception as e:
+    st.error(f"Error connecting to Snowflake: {str(e)}")
+
+def connect_snowflake():
+    conn = snowflake.connector.connect(
+        user=snowflake_user,
+        password=snowflake_password,
+        account=snowflake_account,
+        warehouse=snowflake_warehouse,
+        database=snowflake_database,
+        schema=snowflake_schema
+    )
+    return conn
+
+
 @st.cache_data(show_spinner="Loading Devika's context...")
 def get_table_context(table_name: str, table_description: str, metadata_query: str = None):
     table = table_name.split(".")
-    conn = st.connection("snowflake")
+    #conn = st.connection("snowflake")
+    conn = connect_snowflake()
     columns = conn.query(f"""
         SELECT COLUMN_NAME, DATA_TYPE FROM {table[0].upper()}.INFORMATION_SCHEMA.COLUMNS
         WHERE TABLE_SCHEMA = '{table[1].upper()}' AND TABLE_NAME = '{table[2].upper()}'
