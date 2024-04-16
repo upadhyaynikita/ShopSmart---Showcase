@@ -1,7 +1,25 @@
 from openai import OpenAI
+
 import re
 import streamlit as st
 from prompts import get_system_prompt
+from azure.identity import DefaultAzureCredential
+from azure.keyvault.secrets import SecretClient
+ 
+# Initialize Azure Key Vault client
+vault_uri = "https://akv-invoices.vault.azure.net/"
+credential = DefaultAzureCredential()
+secret_client = SecretClient(vault_uri, credential)
+
+
+# Snowflake Connection Details
+snowflake_user = secret_client.get_secret("sf-user").value
+snowflake_password = secret_client.get_secret("sf-password").value
+snowflake_account = secret_client.get_secret("sf-account-name").value
+snowflake_warehouse = secret_client.get_secret("sf-warehouse").value
+snowflake_database = secret_client.get_secret("sf-database").value
+snowflake_schema = secret_client.get_secret("sf-schema").value
+snowflake_table = secret_client.get_secret("sf-table").value
 
 def chatbot():
     #Code for Chatbot
@@ -10,7 +28,7 @@ def chatbot():
                 st.title("☃️ Devika")
 
                 # Initialize the chat messages history
-                client = OpenAI(api_key=st.secrets.OPENAI_API_KEY)
+                client = OpenAI(api_key=secret_client.get_secret("open-ai-key").value)
                 if "messages" not in st.session_state:
                     # system prompt includes table information, rules, and prompts the LLM to produce
                     # a welcome message to the user.
@@ -44,7 +62,14 @@ def chatbot():
                         sql_match = re.search(r"```sql\n(.*)\n```", response, re.DOTALL)
                         if sql_match:
                             sql = sql_match.group(1)
-                            conn = st.connection("snowflake")
+                            conn = snowflake.connector.connect(
+                            user=snowflake_user,
+                            password=snowflake_password,
+                            account=snowflake_account,
+                            warehouse=snowflake_warehouse,
+                            database=snowflake_database,
+                            schema=snowflake_schema
+                        )
                             message["results"] = conn.query(sql)
                             st.dataframe(message["results"])
                         st.session_state.messages.append(message)
