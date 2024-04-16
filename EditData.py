@@ -29,7 +29,7 @@ try:
     #     database=snowflake_database,
     #     schema=snowflake_schema
     # )
-    st.connect("snowflake")
+    conn = st.connect("snowflake")
     st.success("Snowflake Connection Established Successfully!")
 except Exception as e:
     st.error(f"Error connecting to Snowflake: {str(e)}")
