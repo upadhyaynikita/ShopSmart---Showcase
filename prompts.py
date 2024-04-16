@@ -1,4 +1,21 @@
 import streamlit as st
+from azure.identity import DefaultAzureCredential
+from azure.keyvault.secrets import SecretClient
+import snowflake.connector
+ 
+# Initialize Azure Key Vault client
+vault_uri = "https://akv-invoices.vault.azure.net/"
+credential = DefaultAzureCredential()
+secret_client = SecretClient(vault_uri, credential)
+
+# Snowflake Connection Details
+snowflake_user = secret_client.get_secret("sf-user").value
+snowflake_password = secret_client.get_secret("sf-password").value
+snowflake_account = secret_client.get_secret("sf-account-name").value
+snowflake_warehouse = secret_client.get_secret("sf-warehouse").value
+snowflake_database = secret_client.get_secret("sf-database").value
+snowflake_schema = secret_client.get_secret("sf-schema").value
+snowflake_table = secret_client.get_secret("sf-table").value
 
 SCHEMA_PATH = st.secrets.get("SCHEMA_PATH", "DFS.DEMO")
 QUALIFIED_TABLE_NAME = f"{SCHEMA_PATH}.VW_INVOICES "
@@ -51,7 +68,14 @@ Then show only below 2 example questions for reference, don't run them.  I repea
 @st.cache_data(show_spinner="Loading Devika's context...")
 def get_table_context(table_name: str, table_description: str, metadata_query: str = None):
     table = table_name.split(".")
-    conn = st.connection("snowflake")
+    conn = snowflake.connector.connect(
+        user=snowflake_user,
+        password=snowflake_password,
+        account=snowflake_account,
+        warehouse=snowflake_warehouse,
+        database=snowflake_database,
+        schema=snowflake_schema
+    )
     columns = conn.query(f"""
         SELECT COLUMN_NAME, DATA_TYPE FROM {table[0].upper()}.INFORMATION_SCHEMA.COLUMNS
         WHERE TABLE_SCHEMA = '{table[1].upper()}' AND TABLE_NAME = '{table[2].upper()}'
