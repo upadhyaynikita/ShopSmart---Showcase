@@ -24,6 +24,7 @@ from streamlit import session_state
 
 from chatbot import chatbot
 from plot2 1 import fetch_SF_data
+from EditData import fetch_data, update_data
 
 from streamlit_extras.stylable_container import stylable_container
 
@@ -44,28 +45,28 @@ def stop_chatbot_session():
          st.experimental_rerun()
 
 
-# Snowflake Connection Details
-snowflake_user=st.secrets.snowflake_user
-snowflake_password=st.secrets.snowflake_password
-snowflake_account=st.secrets.snowflake_account
-snowflake_warehouse=st.secrets.snowflake_warehouse
-snowflake_database=st.secrets.snowflake_database
-snowflake_schema=st.secrets.snowflake_schema
-snowflake_table=st.secrets.snowflake_table
+# # Snowflake Connection Details
+# snowflake_user=st.secrets.snowflake_user
+# snowflake_password=st.secrets.snowflake_password
+# snowflake_account=st.secrets.snowflake_account
+# snowflake_warehouse=st.secrets.snowflake_warehouse
+# snowflake_database=st.secrets.snowflake_database
+# snowflake_schema=st.secrets.snowflake_schema
+# snowflake_table=st.secrets.snowflake_table
 
-# Connect to Snowflake
-try:
-    conn = snowflake.connector.connect(
-        user=snowflake_user,
-        password=snowflake_password,
-        account=snowflake_account,
-        warehouse=snowflake_warehouse,
-        database=snowflake_database,
-        schema=snowflake_schema
-    )
-    #st.success("Snowflake Connection Established Successfully!")
-except Exception as e:
-    st.error(f"Error connecting to Snowflake: {str(e)}")
+# # Connect to Snowflake
+# try:
+#     conn = snowflake.connector.connect(
+#         user=snowflake_user,
+#         password=snowflake_password,
+#         account=snowflake_account,
+#         warehouse=snowflake_warehouse,
+#         database=snowflake_database,
+#         schema=snowflake_schema
+#     )
+#     #st.success("Snowflake Connection Established Successfully!")
+# except Exception as e:
+#     st.error(f"Error connecting to Snowflake: {str(e)}")
 
 #Function to publish data to final table
 def publish_data():
@@ -84,29 +85,29 @@ def publish_data():
         conn.close()
 
 # Function to fetch data from Snowflake table
-def fetch_data():
-    try:
-        cursor = conn.cursor()
-        cursor.execute(f"SELECT * FROM {snowflake_table}")
-        columns = [col[0] for col in cursor.description]
-        data = cursor.fetchall()
-        cursor.close()
-        return columns, data
-    except Exception as e:
-        st.error(f"Error fetching data from Snowflake: {str(e)}")
+# def fetch_data():
+#     try:
+#         cursor = conn.cursor()
+#         cursor.execute(f"SELECT * FROM {snowflake_table}")
+#         columns = [col[0] for col in cursor.description]
+#         data = cursor.fetchall()
+#         cursor.close()
+#         return columns, data
+#     except Exception as e:
+#         st.error(f"Error fetching data from Snowflake: {str(e)}")
 
-# Connect to Snowflake
+# # Connect to Snowflake
 
-def connect_snowflake():
-    conn = snowflake.connector.connect(
-        user=snowflake_user,
-        password=snowflake_password,
-        account=snowflake_account,
-        warehouse=snowflake_warehouse,
-        database=snowflake_database,
-        schema=snowflake_schema
-    )
-    return conn
+# def connect_snowflake():
+#     conn = snowflake.connector.connect(
+#         user=snowflake_user,
+#         password=snowflake_password,
+#         account=snowflake_account,
+#         warehouse=snowflake_warehouse,
+#         database=snowflake_database,
+#         schema=snowflake_schema
+#     )
+#     return conn
 
 # Fetch data from Snowflake table
 # Function to fetch data from Snowflake table
@@ -149,15 +150,15 @@ def connect_snowflake():
 
 
 # Function to update data in Snowflake table
-def update_data(column_name, unique_identifier, unique_identifier_value, new_value):
-    try:
-        cursor = conn.cursor()
-        query = f"UPDATE {snowflake_table} SET {column_name} = %s WHERE {unique_identifier} = %s"
-        cursor.execute(query, (new_value, unique_identifier_value))
-        conn.commit()
-        st.success("Data Updated Successfully!, Click on button above to Refresh. ")
-    except Exception as e:
-        st.error(f"Error updating data in Snowflake: {str(e)}")
+# def update_data(column_name, unique_identifier, unique_identifier_value, new_value):
+#     try:
+#         cursor = conn.cursor()
+#         query = f"UPDATE {snowflake_table} SET {column_name} = %s WHERE {unique_identifier} = %s"
+#         cursor.execute(query, (new_value, unique_identifier_value))
+#         conn.commit()
+#         st.success("Data Updated Successfully!, Click on button above to Refresh. ")
+#     except Exception as e:
+#         st.error(f"Error updating data in Snowflake: {str(e)}")
 
 
 
