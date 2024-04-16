@@ -63,13 +63,13 @@ def chatbot():
                         if sql_match:
                             sql = sql_match.group(1)
                             conn = snowflake.connector.connect(
-                            user=snowflake_user,
-                            password=snowflake_password,
-                            account=snowflake_account,
-                            warehouse=snowflake_warehouse,
-                            database=snowflake_database,
-                            schema=snowflake_schema
-                        )
+                              user=snowflake_user,
+                              password=snowflake_password,
+                              account=snowflake_account,
+                              warehouse=snowflake_warehouse,
+                              database=snowflake_database,
+                              schema=snowflake_schema
+                          )
                             message["results"] = conn.query(sql)
                             st.dataframe(message["results"])
                         st.session_state.messages.append(message)
