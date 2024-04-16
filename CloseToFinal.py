@@ -333,7 +333,7 @@ def main():
                             
             # Code for Chatbot
 
-            ##
+            ###
                 st.title("☃️ Devika")
 
                 # Initialize the chat messages history
@@ -372,18 +372,13 @@ def main():
                         if sql_match:
                             sql = sql_match.group(1)
                             conn = st.connection("snowflake")
-                            
-                            results = execute_sql_query(sql)
-                            if results is not None:
-                                st.dataframe(results)
-                                
-                            # message["results"] = conn.query(sql)
-                            # st.dataframe(message["results"])
+                            message["results"] = conn.query(sql)
+                            st.dataframe(message["results"])
                         st.session_state.messages.append(message)
                 # Prompt for user input and save
                 if prompt := st.chat_input():
                     st.session_state.messages.append({"role": "user", "content": prompt})        
-###                     
+###          
         
             # Add a button to stop the session
             stop_chatbot_session()
