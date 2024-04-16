@@ -39,7 +39,7 @@ def handle_response(response):
     # Parse response for SQL query and execute if available
     sql_match = re.search(r"```sql\n(.*)\n```", response, re.DOTALL)
     if sql_match:
-        sql = sql_match.group(1)
+        sql = sql_match.group(1).strip()
         results = execute_sql_query(sql)
         if results is not None:
             st.dataframe(results)
