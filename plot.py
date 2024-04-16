@@ -59,7 +59,7 @@ def fetch_SF_data():
     cursor.execute("SELECT COUNT(*) FROM STG_INVOICES")
     total_records = cursor.fetchone()[0]
     
-    conn.close()
+    # conn.close()
     return total_duplicate_records, null_sub_total_records, duplicate_customer_name_records, total_tax_out_of_range_records, total_records
 
 # # Fetch latest data from Snowflake
