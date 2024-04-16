@@ -14,13 +14,13 @@ import os
 
 
 # Snowflake Connection Details
-snowflake_user = os.environ.get("SF_USER")
-snowflake_password = os.environ.get("SF_PASSWORD")
-snowflake_account = os.environ.get("SF_ACCOUNT")
-snowflake_warehouse = os.environ.get("SF_WAREHOUSE")
-snowflake_database = os.environ.get("SF_DATABASE")
-snowflake_schema = os.environ.get("SF_SCHEMA")
-snowflake_table = os.environ.get("SF_TABLE")
+# snowflake_user = os.environ.get("SF_USER")
+# snowflake_password = os.environ.get("SF_PASSWORD")
+# snowflake_account = os.environ.get("SF_ACCOUNT")
+# snowflake_warehouse = os.environ.get("SF_WAREHOUSE")
+# snowflake_database = os.environ.get("SF_DATABASE")
+# snowflake_schema = os.environ.get("SF_SCHEMA")
+# snowflake_table = os.environ.get("SF_TABLE")
 
 # Function to connect to Snowflake
 def connect_snowflake():
