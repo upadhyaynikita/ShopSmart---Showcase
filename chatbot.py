@@ -17,13 +17,13 @@ from streamlit import session_state
 
 # Snowflake Connection Details
 # process.env.{ENVIRONMENT_VARIABLE_NAME} )
-snowflake_user = os.environ.get("SF_USER")
-snowflake_password = os.environ.get("SF_PASSWORD")
-snowflake_account = os.environ.get("SF_ACCOUNT")
-snowflake_warehouse = os.environ.get("SF_WAREHOUSE")
-snowflake_database = os.environ.get("SF_DATABASE")
-snowflake_schema = os.environ.get("SF_SCHEMA")
-snowflake_table = os.environ.get("SF_TABLE")
+# snowflake_user = os.environ.get("SF_USER")
+# snowflake_password = os.environ.get("SF_PASSWORD")
+# snowflake_account = os.environ.get("SF_ACCOUNT")
+# snowflake_warehouse = os.environ.get("SF_WAREHOUSE")
+# snowflake_database = os.environ.get("SF_DATABASE")
+# snowflake_schema = os.environ.get("SF_SCHEMA")
+# snowflake_table = os.environ.get("SF_TABLE")
 
 
 
@@ -33,14 +33,7 @@ def chatbot():
 
             ###
                 st.title("☃️ Devika")
-
-                # Initialize the chat messages history
-                try:
-                   api_key = os.environ.get("OPEN_AI_KEY")
-                   client = OpenAI(api_key=api_key)
-                              
-                except Exception as e:
-                   print(f"Error: {e}")
+                client = OpenAI(api_key=st.secrets.OPENAI_API_KEY)
                 # client = OpenAI(api_key= os.environ.get("OPEN_AI_KEY"))
                 if "messages" not in st.session_state:
                     # system prompt includes table information, rules, and prompts the LLM to produce
@@ -75,14 +68,7 @@ def chatbot():
                         sql_match = re.search(r"```sql\n(.*)\n```", response, re.DOTALL)
                         if sql_match:
                             sql = sql_match.group(1)
-                            conn = snowflake.connector.connect(
-                              user=snowflake_user,
-                              password=snowflake_password,
-                              account=snowflake_account,
-                              warehouse=snowflake_warehouse,
-                              database=snowflake_database,
-                              schema=snowflake_schema
-                          )
+                            conn = st.connection("snowflake")
                             message["results"] = conn.query(sql)
                             st.dataframe(message["results"])
                         st.session_state.messages.append(message)
