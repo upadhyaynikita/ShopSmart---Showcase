@@ -59,36 +59,36 @@ def fetch_SF_data():
     conn.close()
     return total_duplicate_records, null_amount_records, duplicate_customer_name_records, total_tax_out_of_range_records, total_records
 
-# Fetch latest data from Snowflake
-total_duplicate_records, null_amount_records, duplicate_customer_name_records, total_tax_out_of_range_records, total_records = fetch_SF_data()
+# # Fetch latest data from Snowflake
+# total_duplicate_records, null_amount_records, duplicate_customer_name_records, total_tax_out_of_range_records, total_records = fetch_SF_data()
 
-# Create DataFrame for double bar graph
-df = pd.DataFrame({
-    'Business Rule': ['Duplicate Records (Invoice ID and Invoice Date)', 'Null Amount Records', 'Duplicate Customer Names', 'Total Tax Out of Range Records', 'Total Records'],
-    'Count': [total_duplicate_records, null_amount_records, duplicate_customer_name_records, total_tax_out_of_range_records, total_records],
-    'Color': ['blue', 'blue', 'blue', 'blue', 'orange']
-})
+# # Create DataFrame for double bar graph
+# df = pd.DataFrame({
+#     'Business Rule': ['Duplicate Records (Invoice ID and Invoice Date)', 'Null Amount Records', 'Duplicate Customer Names', 'Total Tax Out of Range Records', 'Total Records'],
+#     'Count': [total_duplicate_records, null_amount_records, duplicate_customer_name_records, total_tax_out_of_range_records, total_records],
+#     'Color': ['blue', 'blue', 'blue', 'blue', 'orange']
+# })
 
-# Create double bar graph
-fig = go.Figure()
+# # Create double bar graph
+# fig = go.Figure()
 
-for index, row in df.iterrows():
-    fig.add_trace(go.Bar(
-        y=[row['Business Rule']],
-        x=[row['Count']],
-        orientation='h',
-        marker=dict(color=row['Color']),
-        name=row['Business Rule'],
-        width=0.3  # Set the width of the bars
-    ))
+# for index, row in df.iterrows():
+#     fig.add_trace(go.Bar(
+#         y=[row['Business Rule']],
+#         x=[row['Count']],
+#         orientation='h',
+#         marker=dict(color=row['Color']),
+#         name=row['Business Rule'],
+#         width=0.3  # Set the width of the bars
+#     ))
 
-# Update layout
-fig.update_layout(
-    barmode='group',
-    title='Invoices Discrepancies Summary',
-    yaxis_title='Business Rule',
-    xaxis_title='Records Count',
-)
+# # Update layout
+# fig.update_layout(
+#     barmode='group',
+#     title='Invoices Discrepancies Summary',
+#     yaxis_title='Business Rule',
+#     xaxis_title='Records Count',
+# )
 
-# Display the graph
-st.plotly_chart(fig, use_container_width=True)
+# # Display the graph
+# st.plotly_chart(fig, use_container_width=True)
