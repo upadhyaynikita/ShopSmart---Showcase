@@ -29,7 +29,7 @@ def chatbot():
                 st.title("☃️ Devika")
 
                 # Initialize the chat messages history
-                client = OpenAI(api_key= os.environ.get("OPEN_API_KEY"))
+                client = OpenAI(api_key= os.environ.get("OPEN_AI_KEY"))
                 if "messages" not in st.session_state:
                     # system prompt includes table information, rules, and prompts the LLM to produce
                     # a welcome message to the user.
