@@ -1,6 +1,6 @@
 from openai import OpenAI
 import snowflake.connector
-
+import os
 import re
 import streamlit as st
 from prompts import get_system_prompt
