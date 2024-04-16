@@ -483,12 +483,12 @@ def main():
                 approve.markdown('<div style="text-align: center;" class="image-container">Upload File<img src="' + image_url + '" width="3%" />Processing & Fraud Detection<img src="' + image_url + '" width="3%" />Fraud Correction</div>', unsafe_allow_html=True)
 
             # Fetch latest data from Snowflake
-            total_duplicate_records, null_amount_records, duplicate_vendor_name_records, total_tax_out_of_range_records, total_records = fetch_SF_data()
+            total_duplicate_records, null_sub_total_records, duplicate_vendor_name_records, total_tax_out_of_range_records, total_records = fetch_SF_data()
 
             # Create DataFrame for double bar graph
             df = pd.DataFrame({
                 'Business Rule': ['Duplicate Records (Invoice ID and Invoice Date)', 'Null Amount Records', 'Duplicate Vendor Names', 'Total Tax Out of Range Records', 'Total Records'],
-                'Count': [total_duplicate_records, null_amount_records, duplicate_vendor_name_records, total_tax_out_of_range_records, total_records],
+                'Count': [total_duplicate_records, null_sub_total_records, duplicate_vendor_name_records, total_tax_out_of_range_records, total_records],
                 'Color': ['blue', 'blue', 'blue', 'blue', 'orange']
             })
 
