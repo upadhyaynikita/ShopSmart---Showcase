@@ -1,21 +1,21 @@
 import streamlit as st
-from azure.identity import DefaultAzureCredential
-from azure.keyvault.secrets import SecretClient
+# from azure.identity import DefaultAzureCredential
+# from azure.keyvault.secrets import SecretClient
 import snowflake.connector
  
-# Initialize Azure Key Vault client
-vault_uri = "https://akv-invoices.vault.azure.net/"
-credential = DefaultAzureCredential()
-secret_client = SecretClient(vault_uri, credential)
+# # Initialize Azure Key Vault client
+# vault_uri = "https://akv-invoices.vault.azure.net/"
+# credential = DefaultAzureCredential()
+# secret_client = SecretClient(vault_uri, credential)
 
 # Snowflake Connection Details
-snowflake_user = secret_client.get_secret("sf-user").value
-snowflake_password = secret_client.get_secret("sf-password").value
-snowflake_account = secret_client.get_secret("sf-account-name").value
-snowflake_warehouse = secret_client.get_secret("sf-warehouse").value
-snowflake_database = secret_client.get_secret("sf-database").value
-snowflake_schema = secret_client.get_secret("sf-schema").value
-snowflake_table = secret_client.get_secret("sf-table").value
+snowflake_user = os.environ.get("SF_USER")
+snowflake_password = os.environ.get("SF_PASSWORD")
+snowflake_account = os.environ.get("SF_ACCOUNT")
+snowflake_warehouse = os.environ.get("SF_WAREHOUSE")
+snowflake_database = os.environ.get("SF_DATABASE")
+snowflake_schema = os.environ.get("SF_SCHEMA")
+snowflake_table = os.environ.get("SF_TABLE")
 
 SCHEMA_PATH = st.secrets.get("SCHEMA_PATH", "DFS.DEMO")
 QUALIFIED_TABLE_NAME = f"{SCHEMA_PATH}.VW_INVOICES "
