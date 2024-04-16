@@ -400,7 +400,8 @@ def main():
         #if st.session_state.get("session_started", False):
             # Display scrollable container
             with st.container(height = 500):
-                chatbot()
+                # chatbot()
+                st.write("hello")
                 
             #Code for Chatbot
 
