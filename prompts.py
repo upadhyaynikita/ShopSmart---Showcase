@@ -1,7 +1,4 @@
 import streamlit as st
-import snowflake.connector
-import os
- 
 
 SCHEMA_PATH = st.secrets.get("SCHEMA_PATH", "DFS.DEMO")
 QUALIFIED_TABLE_NAME = f"{SCHEMA_PATH}.VW_INVOICES "
@@ -47,7 +44,7 @@ For each question from the user, make sure to include a query in your response.
 
 Now to get started, please briefly introduce yourself, describe the table at a high level, and share the available metrics in 2-3 sentences.
 Then show only below 2 example questions for reference, don't run them.  I repeat, show only the below 2 example -
-1. Identify duplicate invoices based on a combination of InvoiceId and SUB_TOTAL
+1. Identify duplicate invoices based on a combination of InvoiceId and SubTotal
 2. Verify VAT compliance by checking if the VAT Amount is correctly calculated within the expected VAT rates (8%, 12%, 18%)
 """
 
