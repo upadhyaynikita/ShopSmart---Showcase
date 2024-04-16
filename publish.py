@@ -1,5 +1,6 @@
 import streamlit as st
 import snowflake.connector
+import os
 
 # from azure.identity import DefaultAzureCredential
 # from azure.keyvault.secrets import SecretClient
