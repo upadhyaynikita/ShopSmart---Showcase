@@ -3,14 +3,23 @@ import snowflake.connector
 import pandas as pd
 import plotly.graph_objects as go
 
-# Snowflake connection parameters
-snowflake_user = 'diwakarnahata4aws'
-snowflake_password = 'Info@999'
-snowflake_account = 'kechpqy-arb81606'
-snowflake_warehouse = 'COMPUTE_WH'
-snowflake_database = 'DFS'
-snowflake_schema = 'DEMO'
-snowflake_table = 'STG_INVOICES'
+from azure.identity import DefaultAzureCredential
+from azure.keyvault.secrets import SecretClient
+ 
+# Initialize Azure Key Vault client
+vault_uri = "https://akv-invoices.vault.azure.net/"
+credential = DefaultAzureCredential()
+secret_client = SecretClient(vault_uri, credential)
+
+
+# Snowflake Connection Details
+snowflake_user = secret_client.get_secret("sf-user").value
+snowflake_password = secret_client.get_secret("sf-password").value
+snowflake_account = secret_client.get_secret("sf-account-name").value
+snowflake_warehouse = secret_client.get_secret("sf-warehouse").value
+snowflake_database = secret_client.get_secret("sf-database").value
+snowflake_schema = secret_client.get_secret("sf-schema").value
+snowflake_table = secret_client.get_secret("sf-table").value
 
 # Function to connect to Snowflake
 def connect_snowflake():
