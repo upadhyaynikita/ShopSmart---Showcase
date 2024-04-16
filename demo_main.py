@@ -125,7 +125,7 @@ def stop_session():
 # def update_data(column_name, unique_identifier, unique_identifier_value, new_value):
 #     try:
 #         cursor = conn.cursor()
-#         query = f"UPDATE {snowflake_table} SET {column_name} = %s WHERE {unique_identifier} = %s"
+#         query = f"UPDATE STG_INVOICES SET {column_name} = %s WHERE {unique_identifier} = %s"
 #         cursor.execute(query, (new_value, unique_identifier_value))
 #         conn.commit()
 #         st.success("Data Updated Successfully!, Click on button above to Refresh. ")
